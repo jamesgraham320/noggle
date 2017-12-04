@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     user = User.find_by(user_params) || User.new(user_params)
     if user.save
       render json: user
-    else 
+    else
       render json: {errors: user.errors}
     end
   end
@@ -15,7 +15,8 @@ class UsersController < ApplicationController
 
   def index
     users = User.all
-    ActionCable.server.broadcast 'game_channel', {users: users}
+    users_online = users.select {|user| user.online == true}
+    ActionCable.server.broadcast "game_channel", {users: users_online}
   end
 
   private

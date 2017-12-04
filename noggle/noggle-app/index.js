@@ -1,9 +1,14 @@
 function establishConnection() {
   window.App = {}
-  window.App.cable = ActionCable.createConsumer("http://localhost:3000/cable")
-  window.App.cable.subscriptions.create("GameInstanceChannel", {
+  window.App.cable = ActionCable.createConsumer(`http://localhost:3000/cable?token=${localStorage.getItem('userId')}`)
+  window.App.cable.subscriptions.create({channel: "GameInstanceChannel", user_id: localStorage.getItem('userId')}, {
   connected() {
     console.log('we made it')
+  },
+    received(data) {
+      if(data.users) {
+        displayOnlineUsers(data.users)
+      }
     }
   })
 }
@@ -29,3 +34,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     })
   })
 })
+
+function displayOnlineUsers(users){
+  let onlineDiv = document.getElementById('users-online')
+  onlineDiv.innerHTML = ""
+  users.forEach(user => {
+    let newP = document.createElement('p')
+    newP.innerText = user.username
+    onlineDiv.append(newP)
+  })
+}
