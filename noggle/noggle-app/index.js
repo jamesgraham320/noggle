@@ -29,10 +29,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         alert(json.errors.username)
       } else {
         localStorage.setItem( 'userId', json.id)
-        console.log(establishConnection())
+        establishConnection()
+        setTimeout(fetchUsers, 400)
         document.getElementById("user-login").style.visibility = 'hidden'
       }
-    }).then(fetchUsers)
+    })
   })
 })
 
