@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20171204211606) do
     t.string "username"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "online", default: false
+    t.boolean "online", default: true
   end
 
   add_foreign_key "scores", "games"
