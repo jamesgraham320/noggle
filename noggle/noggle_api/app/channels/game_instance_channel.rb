@@ -8,5 +8,10 @@ class GameInstanceChannel < ApplicationCable::Channel
   def unsubscribed
     self.current_user.online = false
     self.current_user.save
+
+    users = User.all
+    users_online = users.select {|user| user.online == true}
+    ActionCable.server.broadcast "game_channel", {users: users_online}
+
   end
 end
