@@ -10,6 +10,9 @@ function establishConnection() {
       if(data.users) {
         displayOnlineUsers(data.users)
       }
+      else if (data.current_game) {
+        displayGame(data.current_game)
+      }
     }
   })
 }
@@ -40,12 +43,63 @@ document.addEventListener('DOMContentLoaded', (event) => {
 function displayOnlineUsers(users){
   let onlineDiv = document.getElementById('users-online')
   onlineDiv.innerHTML = ""
+  startButton = document.createElement('button')
+  startButton.addEventListener('click', (event) => {
+    fetch("http://localhost:3000/games", {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'}
+    })
+  })
+  onlineDiv.append(startButton)
+
   users.forEach(user => {
     let newP = document.createElement('p')
     newP.innerText = user.username
     onlineDiv.append(newP)
   })
 }
+
+function displayGame(gameData) {
+  localStorage.setItem('gameId', gameData.game_data.id)
+  document.body.innerHTML = ""
+  let gameHTML = `
+  <div id="game-container">
+    <h1>Nog it out!!!!!</h1>
+    <h2 >Time Left: </h2><h2 id="timer">5</h2>
+    <div id="scramble"></div>
+    <ul id="scoreboard"></ul>
+    <form id="submission-form">
+      <input type="text" id="submission">
+      <input id="submit-word" value="submit" type="submit">
+    </form>
+    <div id="attempts"></div>
+  </div>
+  `
+  document.body.innerHTML = gameHTML
+  let scoreboard = document.getElementById('scoreboard')
+  gameData.users.forEach(user => {
+    let userScore = gameData.scores.find( score => user.id === score.user_id)
+    let newLi = document.createElement('li')
+    newLi.innerHTML = `${user.username}  -  ${userScore.points} points`
+    scoreboard.append(newLi)
+  })
+
+  const interval =  setInterval(
+    function countdown() {
+      let timerDiv = document.getElementById('timer')
+      if (parseInt(timerDiv.innerText) > 0){
+      timerDiv.innerText =  parseInt(timerDiv.innerText) - 1
+      } else {
+        fetch(`http://localhost:3000/games/${localStorage.getItem("gameId")}`, {
+          method: 'PATCH',
+          headers: {'Content-Type': 'application/json'}
+        })
+        //displayScores()
+        clearInterval(interval)
+      }
+    }, 1000)
+}
+
 
 function fetchUsers() {
   fetch("http://localhost:3000/users")
