@@ -23,8 +23,10 @@ function establishConnection() {
     }
   })
 }
+
 document.addEventListener('DOMContentLoaded', (event) => {
   let usernameForm = document.getElementById('user-login')
+  //add event listener to post a new user to our database
   usernameForm.addEventListener('submit', (event) => {
     event.preventDefault()
     let username = document.getElementById("username").value
@@ -38,6 +40,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       if (json.errors) {
         alert(json.errors.username)
       } else {
+        //if a user comes back, now connect to the websocket and show online users
         localStorage.setItem( 'userId', json.id)
         establishConnection()
         setTimeout(fetchUsers, 400)
@@ -47,10 +50,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
   })
 })
 
+//show all online users
 function displayOnlineUsers(users){
   let onlineDiv = document.getElementById('users-online')
   onlineDiv.innerHTML = ""
   startButton = document.createElement('button')
+  startButton.innerText = "Start Game"
   startButton.addEventListener('click', (event) => {
     fetch("http://localhost:3000/games", {
       method: 'post',
