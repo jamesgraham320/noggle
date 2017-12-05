@@ -1,3 +1,4 @@
+//Opens a websocket which receives broadcasted info from Rails
 function establishConnection() {
   window.App = {}
   window.App.cable = ActionCable.createConsumer(`http://localhost:3000/cable?token=${localStorage.getItem('userId')}`)
@@ -50,6 +51,7 @@ function displayOnlineUsers(users){
       headers: {'Content-Type': 'application/json'}
     })
   })
+
   onlineDiv.append(startButton)
 
   users.forEach(user => {
@@ -62,19 +64,6 @@ function displayOnlineUsers(users){
 function displayGame(gameData) {
   localStorage.setItem('gameId', gameData.game_data.id)
   document.body.innerHTML = ""
-  let gameHTML = `
-  <div id="game-container">
-    <h1>Nog it out!!!!!</h1>
-    <h2 >Time Left: </h2><h2 id="timer">5</h2>
-    <div id="scramble"></div>
-    <ul id="scoreboard"></ul>
-    <form id="submission-form">
-      <input type="text" id="submission">
-      <input id="submit-word" value="submit" type="submit">
-    </form>
-    <div id="attempts"></div>
-  </div>
-  `
   document.body.innerHTML = gameHTML
   let scoreboard = document.getElementById('scoreboard')
   gameData.users.forEach(user => {
