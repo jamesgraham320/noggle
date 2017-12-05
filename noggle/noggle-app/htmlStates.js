@@ -1,14 +1,16 @@
 let gameHTML = `
 <div id="game-container">
   <h1>Nog it out!!!!!</h1>
-  <h2>Time Left: </h2><h2 id="timer">5</h2>
+  <h2>Time Left: </h2><h2 id="timer">20</h2>
   <div id="scramble"></div>
   <ul id="scoreboard"></ul>
   <form id="submission-form">
-    <input type="text" id="submission">
+    <input type="text" id="submission" autocomplete="off">
     <input id="submit-word" value="submit" type="submit">
   </form>
-  <div id="attempts"></div>
+  <div id="attempts-container">
+    <ul id="attempts" ></ul>
+  </div>
 </div>
 `
 

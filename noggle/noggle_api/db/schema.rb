@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20171205153020) do
   create_table "scores", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "game_id"
-    t.integer "points"
+    t.integer "points", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_scores_on_game_id"
