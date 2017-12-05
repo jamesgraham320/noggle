@@ -4,7 +4,7 @@ let guessedWords = []
 function establishConnection() {
   //Opens a websocket which receives broadcasted info from Rails
   window.App = {}
-  window.App.cable = ActionCable.createConsumer(`http://localhost:3000/cable?token=${localStorage.getItem('userId')}`)
+  window.App.cable = ActionCable.createConsumer(`http://localhost:3000/cable?token=${sessionStorage.getItem('userId')}`)
   return window.App.cable.subscriptions.create("GameInstanceChannel", {
   connected() {
     console.log('we made it')
@@ -20,11 +20,15 @@ function establishConnection() {
       else if (data.scores) {
         displayScores(data.scores)
       }
+      else if (data.final_scores) {
+        displayEndGame(data.final_scores)
+      }
     }
   })
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
+  sessionStorage.clear();
   let usernameForm = document.getElementById('user-login')
   //add event listener to post a new user to our database
   usernameForm.addEventListener('submit', (event) => {
@@ -41,7 +45,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         alert(json.errors.username)
       } else {
         //if a user comes back, now connect to the websocket and show online users
-        localStorage.setItem( 'userId', json.id)
+        sessionStorage.setItem( 'userId', json.id)
         establishConnection()
         setTimeout(fetchUsers, 400)
         document.getElementById("user-login").style.visibility = 'hidden'
@@ -73,16 +77,16 @@ function displayOnlineUsers(users){
 }
 
 function displayGame(gameData) {
-  localStorage.setItem('gameId', gameData.game_data.id)
+  sessionStorage.setItem('gameId', gameData.game_data.id)
   document.body.innerHTML = ""
   document.body.innerHTML = gameHTML
   //Get and set the div with the scrammbled letters
   let scrambleDiv = document.getElementById('scramble')
   scrambleDiv.innerText = gameData.game_data.scramble
   scrambleSolutions = gameData.game_data.solutions
-  //Get the score for this user and set their scoreId in localStorage
-  let score = gameData.scores.find( score => parseInt(localStorage.getItem('userId')) === score.user_id)
-  localStorage.setItem('scoreId', score.id)
+  //Get the score for this user and set their scoreId in sessionStorage
+  let score = gameData.scores.find( score => parseInt(sessionStorage.getItem('userId')) === score.user_id)
+  sessionStorage.setItem('scoreId', score.id)
   displayScores(gameData)
   //countdown for game time
   timer()
@@ -109,11 +113,6 @@ function displayScores(gameData) {
   })
 }
 
-function displayGameOver() {
-  document.body.innerHTML = ""
-  document.body.innerHTML = gameOverHTML
-}
-
 function timer(){
   const interval =  setInterval(
     function countdown() {
@@ -121,7 +120,7 @@ function timer(){
       if (parseInt(timerDiv.innerText) > 0){
       timerDiv.innerText =  parseInt(timerDiv.innerText) - 1
       } else {
-        fetch(`http://localhost:3000/games/${localStorage.getItem("gameId")}`, {
+        fetch(`http://localhost:3000/games/${sessionStorage.getItem("gameId")}`, {
           method: 'PATCH',
           headers: {'Content-Type': 'application/json'}
         })
@@ -135,11 +134,11 @@ function timer(){
 function checkUserWord(word){
   //Checks word is a solution and sends it back to api as a score update
   if (scrambleSolutions.includes(word) && (!guessedWords.includes(word))) {
-    fetch(`http://localhost:3000/scores/${localStorage.getItem('scoreId')}`,{
+    fetch(`http://localhost:3000/scores/${sessionStorage.getItem('scoreId')}`,{
       method: 'PATCH',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(
-        {score: {points: word.length, game: parseInt(localStorage.getItem('gameId'))}})
+        {score: {points: word.length, game: parseInt(sessionStorage.getItem('gameId'))}})
     })
     guessedWords.push(word)
     showGuessedWords()
@@ -157,4 +156,20 @@ function showGuessedWords(){
 }
 function fetchUsers() {
   fetch("http://localhost:3000/users")
+}
+
+function displayEndGame(finalScores) {
+  document.body.innerHTML = gameOverHTML;
+  let winners = []
+  finalScores.winner.forEach(score => {
+    winners.push(finalScores.users.find(user => user.id === score.user_id).username)
+  })
+  let winnerDiv = document.getElementById('winner');
+  if (winners.length === 1) {
+    winnerDiv.innerText = winners[0] + ' wins!'
+  }
+  else {
+    let winnerString = winners.slice(0,-1).join(', ') + ` & ${winners.pop()}`
+    winnerDiv.innerText = winnerString + ' win!'
+  }
 }

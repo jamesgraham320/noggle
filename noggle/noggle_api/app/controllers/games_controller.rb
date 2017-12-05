@@ -13,6 +13,8 @@ class GamesController < ApplicationController
   def update
     game = Game.find(params[:id])
     game.update(running: false)
-    ActionCable.server.broadcast 'game_channel', {final_scores: {users: game.users, scores: game.scores}}
+    highest_score = game.scores.order('points DESC').first.points
+    winner = game.scores.select {|score| score.points == highest_score}
+    ActionCable.server.broadcast 'game_channel', {final_scores: {users: game.users, scores: game.scores, winner: winner}}
   end
 end
