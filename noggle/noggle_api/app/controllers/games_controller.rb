@@ -3,7 +3,6 @@ class GamesController < ApplicationController
   def create
     current_game = Game.find_by(running: true) || Game.new
     current_game.users = User.online
-    # Add logic for doing the word scramble
     if current_game.save
       ActionCable.server.broadcast 'game_channel', {current_game: {game_data: current_game, scores: current_game.scores, users: current_game.users}}
     else
