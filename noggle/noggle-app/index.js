@@ -23,6 +23,8 @@ function establishConnection() {
       else if (data.final_scores) {
         displayEndGame(data.final_scores)
       }
+      else if (data.message)
+        displayMessage(data.message)
     }
   })
 }
@@ -37,7 +39,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fetch("http://localhost:3000/users", {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({'username': username})
+      body: JSON.stringify({'username': username.toLowerCase()})
     })
     .then(res => res.json())
     .then( json => {
@@ -56,10 +58,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 //show all online users
 function displayOnlineUsers(users){
+  document.body.innerHTML = usersOnlineHTML
   let onlineDiv = document.getElementById('users-online')
+  let startButton = document.getElementById('start-game')
+  let messageForm = document.getElementById('message-form')
   onlineDiv.innerHTML = ""
-  startButton = document.createElement('button')
-  startButton.innerText = "Start Game"
+
   startButton.addEventListener('click', (event) => {
     fetch("http://localhost:3000/games", {
       method: 'post',
@@ -67,18 +71,26 @@ function displayOnlineUsers(users){
     })
   })
 
-  onlineDiv.append(startButton)
-
   users.forEach(user => {
     let newP = document.createElement('p')
     newP.innerText = user.username
     onlineDiv.append(newP)
   })
+
+  messageForm.addEventListener('submit', (event) => {
+    event.preventDefault()
+    let message = document.getElementById('message').value
+    fetch('http://localhost:3000/messages', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message: {user: parseInt(sessionStorage.userId), content: message}})
+    })
+    document.getElementById('message').value = ""
+  })
 }
 
 function displayGame(gameData) {
   sessionStorage.setItem('gameId', gameData.game_data.id)
-  document.body.innerHTML = ""
   document.body.innerHTML = gameHTML
   //Get and set the div with the scrammbled letters
   let scrambleDiv = document.getElementById('scramble')
@@ -100,6 +112,14 @@ function displayGame(gameData) {
     checkUserWord(userWord)
   })
 }
+function displayMessage(gameData){
+  let newMessage = document.getElementById('messages')
+  let newP = document.createElement('p')
+  newP.innerText = gameData.user_name + ":  " + gameData.content
+  newMessage.append(newP)
+
+}
+
 
 function displayScores(gameData) {
   //Add everyones score to the scoreboard

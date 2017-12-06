@@ -1,3 +1,20 @@
+
+let usersOnlineHTML = `
+<div id="users-online">
+</div>
+<div>
+  <div id="messages">
+  </div>
+    <form id="message-form">
+      <input type="text" id="message" autocomplete="off">
+      <input id="submit-message" value="submit" type="submit">
+    </form>
+</div>
+<div id="scoresboard">
+</div>
+<button id="start-game">Start Game</button>
+`
+
 let gameHTML = `
 <div id="game-container">
   <h1>Nog it out!!!!!</h1>
