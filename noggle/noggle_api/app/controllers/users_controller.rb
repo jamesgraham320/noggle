@@ -16,7 +16,11 @@ class UsersController < ApplicationController
   def index
     users = User.all
     users_online = users.select {|user| user.online == true}
-    ActionCable.server.broadcast "game_channel", {users: users_online}
+    object = {users: users_online}
+    if Game.last.running
+      object['game'] = Game.last.id
+    end
+    ActionCable.server.broadcast "game_channel", object
   end
 
   private

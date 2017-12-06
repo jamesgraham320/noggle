@@ -1,18 +1,32 @@
 
 let usersOnlineHTML = `
+<h1 class="online-title">noggle</h1>
+<div class="dashboard-container">
+
 <div id="users-online">
 </div>
 <div>
+  <h2>Send Messages!</h2>
   <div id="messages">
   </div>
     <form id="message-form">
-      <input type="text" id="message" autocomplete="off">
-      <input id="submit-message" value="submit" type="submit">
+      <div class="field has-addons">
+        <div class="control">
+          <input type="text" class="input is-small" id="message" autocomplete="off">
+        </div>
+        <div class="control">
+          <input id="submit-message" value="⏎" class="button is-primary is-small" type="submit">
+        </div>
+      </div>
     </form>
 </div>
 <div id="scoresboard">
+<h2>See your scores!</h2>
 </div>
-<button id="start-game">Start Game</button>
+</div>
+<div class="center-this-bitch">
+<button id="start-game" class="button is-primary is-large is-rounded">Start Game</button>
+</div>
 `
 
 let gameHTML = `

@@ -13,7 +13,9 @@ function establishConnection() {
     received(data) {
       console.log(data)
       if(data.users) {
-        displayOnlineUsers(data.users)
+        if (!sessionStorage.gameId){
+          displayOnlineUsers(data)
+        } 
       }
       else if (data.current_game) {
         displayGame(data.current_game)
@@ -22,6 +24,7 @@ function establishConnection() {
         displayScores(data.scores)
       }
       else if (data.final_scores) {
+        sessionStorage.removeItem('gameId')
         clearInterval(timer)
         displayEndGame(data.final_scores)
       }
@@ -59,14 +62,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
 })
 
 //show all online users
-function displayOnlineUsers(users){
+function displayOnlineUsers(data){
   
   document.body.innerHTML = usersOnlineHTML
   let onlineDiv = document.getElementById('users-online')
   let startButton = document.getElementById('start-game')
   let messageForm = document.getElementById('message-form')
-  onlineDiv.innerHTML = ""
-
+  onlineDiv.innerHTML = "<h2>Currently Online: </h2>"
+  if (data.game) {
+    sessionStorage.setItem('gameId', data.game)
+    startButton.innerText = "Game In Progress"
+    startButton.disabled = true
+  }
   startButton.addEventListener('click', (event) => {
     fetch("http://localhost:3000/games", {
       method: 'post',
@@ -74,7 +81,7 @@ function displayOnlineUsers(users){
     })
   })
 
-  users.forEach(user => {
+  data.users.forEach(user => {
     let newP = document.createElement('p')
     newP.innerText = user.username
     onlineDiv.append(newP)
@@ -132,6 +139,7 @@ function displayMessage(gameData){
   let newP = document.createElement('p')
   newP.innerText = gameData.user_name + ":  " + gameData.content
   newMessage.append(newP)
+  $('#messages').scrollTop($('#messages')[0].scrollHeight);
 
 }
 
