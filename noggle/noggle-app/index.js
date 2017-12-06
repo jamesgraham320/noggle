@@ -1,5 +1,6 @@
-let scrambleSolutions = []
-let guessedWords = []
+//let scrambleSolutions = []
+//let guessedWords = []
+let timer
 
 function establishConnection() {
   //Opens a websocket which receives broadcasted info from Rails
@@ -21,6 +22,7 @@ function establishConnection() {
         displayScores(data.scores)
       }
       else if (data.final_scores) {
+        clearInterval(timer)
         displayEndGame(data.final_scores)
       }
       else if (data.message)
@@ -58,6 +60,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 //show all online users
 function displayOnlineUsers(users){
+  
   document.body.innerHTML = usersOnlineHTML
   let onlineDiv = document.getElementById('users-online')
   let startButton = document.getElementById('start-game')
@@ -91,17 +94,29 @@ function displayOnlineUsers(users){
 
 function displayGame(gameData) {
   sessionStorage.setItem('gameId', gameData.game_data.id)
+  let guessedWords = []
   document.body.innerHTML = gameHTML
   //Get and set the div with the scrammbled letters
   let scrambleDiv = document.getElementById('scramble')
   scrambleDiv.innerText = gameData.game_data.scramble
-  scrambleSolutions = gameData.game_data.solutions
+  let scrambleSolutions = gameData.game_data.solutions
   //Get the score for this user and set their scoreId in sessionStorage
   let score = gameData.scores.find( score => parseInt(sessionStorage.getItem('userId')) === score.user_id)
   sessionStorage.setItem('scoreId', score.id)
   displayScores(gameData)
   //countdown for game time
-  timer()
+  timer =  setInterval(
+  function countdown() {
+    let timerDiv = document.getElementById('timer')
+    if (parseInt(timerDiv.innerText) > 0){
+    timerDiv.innerText =  parseInt(timerDiv.innerText) - 1
+    } else {
+      fetch(`http://localhost:3000/games/${sessionStorage.getItem("gameId")}`, {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'}
+      })
+    }
+  }, 1000)
 
   //Check a users submitted word against scrambleSolutions
   let submissionForm = document.getElementById('submission-form')
@@ -109,7 +124,7 @@ function displayGame(gameData) {
     event.preventDefault()
     let userWord = document.getElementById('submission').value
     document.getElementById('submission').value = ""
-    checkUserWord(userWord)
+    checkUserWord(userWord, scrambleSolutions, guessedWords)
   })
 }
 function displayMessage(gameData){
@@ -133,25 +148,9 @@ function displayScores(gameData) {
   })
 }
 
-function timer(){
-  const interval =  setInterval(
-    function countdown() {
-      let timerDiv = document.getElementById('timer')
-      if (parseInt(timerDiv.innerText) > 0){
-      timerDiv.innerText =  parseInt(timerDiv.innerText) - 1
-      } else {
-        fetch(`http://localhost:3000/games/${sessionStorage.getItem("gameId")}`, {
-          method: 'PATCH',
-          headers: {'Content-Type': 'application/json'}
-        })
-        //displayScores()
-        clearInterval(interval)
-      }
-    }, 1000)
-}
 
 
-function checkUserWord(word){
+function checkUserWord(word, scrambleSolutions, guessedWords){
   //Checks word is a solution and sends it back to api as a score update
   if (scrambleSolutions.includes(word) && (!guessedWords.includes(word))) {
     fetch(`http://localhost:3000/scores/${sessionStorage.getItem('scoreId')}`,{
@@ -161,11 +160,11 @@ function checkUserWord(word){
         {score: {points: word.length, game: parseInt(sessionStorage.getItem('gameId'))}})
     })
     guessedWords.push(word)
-    showGuessedWords()
+    showGuessedWords(guessedWords)
   }
 }
 
-function showGuessedWords(){
+function showGuessedWords(guessedWords){
   let attempts = document.getElementById('attempts')
   attempts.innerText = ''
   guessedWords.forEach( word => {
@@ -192,4 +191,9 @@ function displayEndGame(finalScores) {
     let winnerString = winners.slice(0,-1).join(', ') + ` & ${winners.pop()}`
     winnerDiv.innerText = winnerString + ' win!'
   }
+  let startOver = document.getElementById("start-over")
+  startOver.addEventListener('click', event => {
+    document.body.innerHTML = usersOnlineHTML
+    fetchUsers()
+  })
 }
