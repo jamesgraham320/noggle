@@ -154,6 +154,7 @@ function showGuessedWords(){
     attempts.append(attemptLi)
   })
 }
+
 function fetchUsers() {
   fetch("http://localhost:3000/users")
 }
@@ -172,4 +173,5 @@ function displayEndGame(finalScores) {
     let winnerString = winners.slice(0,-1).join(', ') + ` & ${winners.pop()}`
     winnerDiv.innerText = winnerString + ' win!'
   }
+
 }
