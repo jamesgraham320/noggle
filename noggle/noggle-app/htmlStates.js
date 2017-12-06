@@ -20,8 +20,10 @@ let usersOnlineHTML = `
       </div>
     </form>
 </div>
-<div id="scoresboard">
-<h2>See your scores!</h2>
+<div id="scoreboard">
+<h2>Top Scores!</h2>
+<ol id="leaderboard">
+</ol>
 </div>
 </div>
 <div class="center-this-bitch">
@@ -32,7 +34,7 @@ let usersOnlineHTML = `
 let gameHTML = `
 <div id="game-container">
   <h1>Nog it out!!!!!</h1>
-  <h2>Time Left: </h2><h2 id="timer">20</h2>
+  <h2>Time Left: </h2><h2 id="timer">10000</h2>
   <div id="scramble"></div>
   <ul id="scoreboard"></ul>
   <form id="submission-form">

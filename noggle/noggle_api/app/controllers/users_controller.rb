@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   def create
     user = User.find_by(user_params) || User.new(user_params)
     if user.save
-      render json: user
+      render json: {user: user, user_high_scores: user.high_scores}
     else
       render json: {errors: user.errors}
     end
@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   def index
     users = User.all
     users_online = users.select {|user| user.online == true}
-    object = {users: users_online}
+    object = {users: users_online, high_scores: Score.high_scores}
     if Game.last.running
       object['game'] = Game.last.id
     end

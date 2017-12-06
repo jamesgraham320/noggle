@@ -52,10 +52,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         alert(json.errors.username)
       } else {
         //if a user comes back, now connect to the websocket and show online users
-        sessionStorage.setItem( 'userId', json.id)
+        sessionStorage.setItem( 'userId', json.user.id)
         establishConnection()
         setTimeout(fetchUsers, 400)
-        document.getElementById("user-login").style.visibility = 'hidden'
       }
     })
   })
@@ -68,7 +67,13 @@ function displayOnlineUsers(data){
   let onlineDiv = document.getElementById('users-online')
   let startButton = document.getElementById('start-game')
   let messageForm = document.getElementById('message-form')
+  let leaderBoard = document.getElementById('leaderboard')
   onlineDiv.innerHTML = "<h2>Currently Online: </h2>"
+  data.high_scores.forEach(score => {
+    let newLi = document.createElement('li')
+    newLi.innerHTML = `${score.user} -- ${score.points}`
+    leaderBoard.append(newLi)
+  })
   if (data.game) {
     sessionStorage.setItem('gameId', data.game)
     startButton.innerText = "Game In Progress"
