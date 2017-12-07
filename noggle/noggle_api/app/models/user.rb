@@ -7,4 +7,9 @@ class User < ApplicationRecord
   def self.online
     self.all.where('online = ?', true)
   end
+
+  def high_scores 
+    self.scores.order("points DESC").limit(10)
+  end
+
 end

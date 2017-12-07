@@ -1,5 +1,6 @@
-let scrambleSolutions = []
-let guessedWords = []
+//let scrambleSolutions = []
+//let guessedWords = []
+let timer
 
 function establishConnection() {
   //Opens a websocket which receives broadcasted info from Rails
@@ -12,7 +13,9 @@ function establishConnection() {
     received(data) {
       console.log(data)
       if(data.users) {
-        displayOnlineUsers(data.users)
+        if (!sessionStorage.gameId){
+          displayOnlineUsers(data)
+        }
       }
       else if (data.current_game) {
         displayGame(data.current_game)
@@ -21,8 +24,12 @@ function establishConnection() {
         displayScores(data.scores)
       }
       else if (data.final_scores) {
+        sessionStorage.removeItem('gameId')
+        clearInterval(timer)
         displayEndGame(data.final_scores)
       }
+      else if (data.message)
+        displayMessage(data.message)
     }
   })
 }
@@ -37,7 +44,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fetch("http://localhost:3000/users", {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({'username': username})
+      body: JSON.stringify({'username': username.toLowerCase()})
     })
     .then(res => res.json())
     .then( json => {
@@ -45,21 +52,33 @@ document.addEventListener('DOMContentLoaded', (event) => {
         alert(json.errors.username)
       } else {
         //if a user comes back, now connect to the websocket and show online users
-        sessionStorage.setItem( 'userId', json.id)
+        sessionStorage.setItem( 'userId', json.user.id)
         establishConnection()
         setTimeout(fetchUsers, 400)
-        document.getElementById("user-login").style.visibility = 'hidden'
       }
     })
   })
 })
 
 //show all online users
-function displayOnlineUsers(users){
+function displayOnlineUsers(data){
+
+  document.body.innerHTML = usersOnlineHTML
   let onlineDiv = document.getElementById('users-online')
-  onlineDiv.innerHTML = ""
-  startButton = document.createElement('button')
-  startButton.innerText = "Start Game"
+  let startButton = document.getElementById('start-game')
+  let messageForm = document.getElementById('message-form')
+  let leaderBoard = document.getElementById('leaderboard')
+  onlineDiv.innerHTML = "<h2>Currently Online: </h2>"
+  data.high_scores.forEach(score => {
+    let newLi = document.createElement('li')
+    newLi.innerHTML = `${score.user} -- ${score.points}`
+    leaderBoard.append(newLi)
+  })
+  if (data.game) {
+    sessionStorage.setItem('gameId', data.game)
+    startButton.innerText = "Game In Progress"
+    startButton.disabled = true
+  }
   startButton.addEventListener('click', (event) => {
     fetch("http://localhost:3000/games", {
       method: 'post',
@@ -67,29 +86,49 @@ function displayOnlineUsers(users){
     })
   })
 
-  onlineDiv.append(startButton)
-
-  users.forEach(user => {
+  data.users.forEach(user => {
     let newP = document.createElement('p')
     newP.innerText = user.username
     onlineDiv.append(newP)
+  })
+
+  messageForm.addEventListener('submit', (event) => {
+    event.preventDefault()
+    let message = document.getElementById('message').value
+    fetch('http://localhost:3000/messages', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message: {user: parseInt(sessionStorage.userId), content: message}})
+    })
+    document.getElementById('message').value = ""
   })
 }
 
 function displayGame(gameData) {
   sessionStorage.setItem('gameId', gameData.game_data.id)
-  document.body.innerHTML = ""
+  let guessedWords = []
   document.body.innerHTML = gameHTML
   //Get and set the div with the scrammbled letters
   let scrambleDiv = document.getElementById('scramble')
   scrambleDiv.innerText = gameData.game_data.scramble
-  scrambleSolutions = gameData.game_data.solutions
+  let scrambleSolutions = gameData.game_data.solutions
   //Get the score for this user and set their scoreId in sessionStorage
   let score = gameData.scores.find( score => parseInt(sessionStorage.getItem('userId')) === score.user_id)
   sessionStorage.setItem('scoreId', score.id)
   displayScores(gameData)
   //countdown for game time
-  timer()
+  timer =  setInterval(
+  function countdown() {
+    let timerDiv = document.getElementById('timer')
+    if (parseInt(timerDiv.innerText) > 0){
+    timerDiv.innerText =  parseInt(timerDiv.innerText) - 1
+    } else {
+      fetch(`http://localhost:3000/games/${sessionStorage.getItem("gameId")}`, {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'}
+      })
+    }
+  }, 1000)
 
   //Check a users submitted word against scrambleSolutions
   let submissionForm = document.getElementById('submission-form')
@@ -97,9 +136,18 @@ function displayGame(gameData) {
     event.preventDefault()
     let userWord = document.getElementById('submission').value
     document.getElementById('submission').value = ""
-    checkUserWord(userWord)
+    checkUserWord(userWord, scrambleSolutions, guessedWords)
   })
 }
+function displayMessage(gameData){
+  let newMessage = document.getElementById('messages')
+  let newP = document.createElement('p')
+  newP.innerText = gameData.user_name + ":  " + gameData.content
+  newMessage.append(newP)
+  $('#messages').scrollTop($('#messages')[0].scrollHeight);
+
+}
+
 
 function displayScores(gameData) {
   //Add everyones score to the scoreboard
@@ -113,25 +161,9 @@ function displayScores(gameData) {
   })
 }
 
-function timer(){
-  const interval =  setInterval(
-    function countdown() {
-      let timerDiv = document.getElementById('timer')
-      if (parseInt(timerDiv.innerText) > 0){
-      timerDiv.innerText =  parseInt(timerDiv.innerText) - 1
-      } else {
-        fetch(`http://localhost:3000/games/${sessionStorage.getItem("gameId")}`, {
-          method: 'PATCH',
-          headers: {'Content-Type': 'application/json'}
-        })
-        //displayScores()
-        clearInterval(interval)
-      }
-    }, 1000)
-}
 
 
-function checkUserWord(word){
+function checkUserWord(word, scrambleSolutions, guessedWords){
   //Checks word is a solution and sends it back to api as a score update
   if (scrambleSolutions.includes(word) && (!guessedWords.includes(word))) {
     fetch(`http://localhost:3000/scores/${sessionStorage.getItem('scoreId')}`,{
@@ -141,11 +173,11 @@ function checkUserWord(word){
         {score: {points: word.length, game: parseInt(sessionStorage.getItem('gameId'))}})
     })
     guessedWords.push(word)
-    showGuessedWords()
+    showGuessedWords(guessedWords)
   }
 }
 
-function showGuessedWords(){
+function showGuessedWords(guessedWords){
   let attempts = document.getElementById('attempts')
   attempts.innerText = ''
   guessedWords.forEach( word => {
@@ -173,5 +205,9 @@ function displayEndGame(finalScores) {
     let winnerString = winners.slice(0,-1).join(', ') + ` & ${winners.pop()}`
     winnerDiv.innerText = winnerString + ' win!'
   }
-
+  let startOver = document.getElementById("start-over")
+  startOver.addEventListener('click', event => {
+    document.body.innerHTML = usersOnlineHTML
+    fetchUsers()
+  })
 }

@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
+    <link rel="stylesheet" href="styles.css" charset="utf-8">
+
     <title>noggle</title>
     <script src="action_cable.js"></script>
     <script src="index.js"></script>
@@ -11,10 +17,20 @@
     </script>
   </head>
   <body>
-    <form id='user-login' accept-charset="utf-8">
-      <input type="text" name="username" id="username" placeholder="Enter Your Name" />
-      <input type="submit" name="submit" id="submit" value="Submit" />
-    </form>
-    <div id='users-online'></div>
+    <div class="home-container">
+      
+      <h1>noggle</h1>
+      <form id='user-login' accept-charset="utf-8">
+        <div class="field has-addons">
+          <div class="control">
+            <input type="text" name="username" class="input" id="username" placeholder="Enter Your Name" autocomplete="off"/>
+          </div>
+          <div class="control">
+            <input type="submit" name="submit" class="button is-primary" id="submit" value="Submit" />
+          </div>
+        </div>
+      </form>
+    </div>
+
   </body>
 </html>
