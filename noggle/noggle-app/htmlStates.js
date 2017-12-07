@@ -54,7 +54,16 @@ let gameHTML = `
   <div id="game-container">
     <div id="game-scores">
       <h2>Scores</h2>
-      <ul id="scoreboard"></ul>
+      <table class="table is-hoverable is-narrow is-fullwidth" style="background-color:inherit">
+        <thead>
+          <tr>
+            <td>Username</td>
+            <td>Points</td>
+          </tr>
+        </thead>
+        <tbody id="scoreboard">
+        </tbody>
+      </table>
     </div>
       <form id="submission-form">
         <div class="field has-addons">
@@ -82,8 +91,16 @@ let gameOverHTML = `
   </div>
   <div id="final-scores">
     <h2>Final Scores</h2>
-      <ul id="scoreboard">
-      </ul>
+      <table class="table is-hoverable is-narrow is-fullwidth" style="background-color:inherit">
+        <thead>
+          <tr>
+            <td>Username</td>
+            <td>Points</td>
+          </tr>
+        </thead>
+        <tbody id="scoreboard">
+        </tbody>
+      </table>
   </div>
   <div class="center-this-bitch">
     <button id="start-over" class="button is-primary is-large is-rounded">Play Again</button>
