@@ -14,7 +14,8 @@ h2 {
   font-family: "Fredoka One", cursive;
   text-align: center;
   font-size: 1.4444444em;
-  color: #384E77; }
+  color: #384E77;
+  margin-bottom: 1%;}
 
 .online-title {
   margin-top: 5vh;
@@ -68,7 +69,7 @@ input {
   text-align: center;
   width: 100%; }
 
-#start-game {
+#start-game, #start-over {
   border-radius: 10px; }
 
 #message {
@@ -107,4 +108,48 @@ input {
   align-items: center;
   justify-content: space-evenly; }
 
+#scramble {
+  letter-spacing: 20px;
+}
+
+#game-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#game-container > div {
+  font-size: 0.9em;
+  background-color: #F4F4F4;
+  width: 23%;
+  height: 39vh;
+  padding: 15px 50px;
+  margin-left: -10vw;
+  margin-right: -10vw;
+  margin-bottom: 20px;
+  margin-top: -40px;
+  border-radius: 10px;
+  box-shadow: 5px 5px #384E77;
+}
+
+#word-attempts {
+  text-align: center;
+  overflow: auto;
+}
+
+#final-scores {
+  font-size: 0.9em;
+  background-color: #F4F4F4;
+  width: 23%;
+  height: 39vh;
+  padding: 15px 50px;
+  margin: 15px auto;
+  border-radius: 10px;
+  box-shadow: 5px 5px #384E77;
+  overflow: auto;
+}
+
+#winner h1{
+  margin-bottom: 1%;
+}
 /*# sourceMappingURL=styles.css.map */

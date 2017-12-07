@@ -195,18 +195,28 @@ function fetchUsers() {
 
 function displayEndGame(finalScores) {
   document.body.innerHTML = gameOverHTML;
+  let scoreboard = document.getElementById('scoreboard')
+  //get the winners and display them
   let winners = []
   finalScores.winner.forEach(score => {
     winners.push(finalScores.users.find(user => user.id === score.user_id).username)
   })
   let winnerDiv = document.getElementById('winner');
   if (winners.length === 1) {
-    winnerDiv.innerText = winners[0] + ' wins!'
+    winnerDiv.innerHTML = `<h1>${winners[0] + ' wins!'}</h1>`
   }
   else {
     let winnerString = winners.slice(0,-1).join(', ') + ` & ${winners.pop()}`
     winnerDiv.innerText = winnerString + ' win!'
   }
+  //display final scores
+  finalScores.users.forEach(user => {
+    let userScore = finalScores.scores.find( score => user.id === score.user_id)
+    let newLi = document.createElement('li')
+    newLi.innerText = `${user.username}  -  ${userScore.points} points`
+    scoreboard.append(newLi)
+  })
+  //add event listener to start over button
   let startOver = document.getElementById("start-over")
   startOver.addEventListener('click', event => {
     document.body.innerHTML = usersOnlineHTML

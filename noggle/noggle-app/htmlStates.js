@@ -33,28 +33,43 @@ let usersOnlineHTML = `
 `
 
 let gameHTML = `
-<div id="game-container">
-  <h1>Nog it out!!!!!</h1>
-  <h2>Time Left: </h2><h2 id="timer">10000</h2>
-  <div id="scramble"></div>
-  <ul id="scoreboard"></ul>
-  <form id="submission-form">
-    <input type="text" id="submission" autocomplete="off">
-    <input id="submit-word" value="submit" type="submit">
-  </form>
-  <div id="attempts-container">
-    <ul id="attempts" ></ul>
-  </div>
+  <h1 id="scramble"></h1>
+  <h2>Time Left: </h2><h2 id="timer">20</h2>
+  <div id="game-container">
+    <div id="game-scores">
+      <h2>Scores</h2>
+      <ul id="scoreboard"></ul>
+    </div>
+      <form id="submission-form">
+        <div class="field has-addons">
+          <div class="control">
+            <input type="text" class="input is-large" id="submission" autocomplete="off">
+          </div>
+          <div class="control">
+            <input id="submit-word" value="⏎" class="button is-primary is-large" type="submit">
+          </div>
+        </div>
+      </form>
+    <div id="attempts-container">
+      <h2>Guessed Words</h2>
+      <div id="word-attempts">
+        <ul id="attempts"></ul>
+      </div>
+    </div>
 </div>
 `
 
 
 let gameOverHTML = `
-  <h1>Nog it out!!!!!</h1>
-  <h2>Time Up!!!<h2>
   <div id="winner">
-    <h5> Your Name Here <h5>
+    <h1> Your Name Here </h1>
   </div>
-  <ul id="scoreboard"></ul>
-  <button id="start-over">Play Again</button>
+  <div id="final-scores">
+    <h2>Final Scores</h2>
+      <ul id="scoreboard">
+      </ul>
+  </div>
+  <div class="center-this-bitch">
+    <button id="start-over" class="button is-primary is-large is-rounded">Play Again</button>
+  </div>
 `
