@@ -50,7 +50,7 @@ let usersOnlineHTML = `
 
 let gameHTML = `
   <h1 id="scramble"></h1>
-  <h2>Time Left: </h2><h2 id="timer">20</h2>
+  <h2>Time Left: </h2><h2 id="timer">60</h2>
   <div id="game-container">
     <div id="game-scores">
       <h2>Scores</h2>
@@ -78,7 +78,8 @@ let gameHTML = `
     <div id="attempts-container">
       <h2>Guessed Words</h2>
       <div id="word-attempts">
-        <ul id="attempts"></ul>
+        <ul id="attempts">
+        </ul>
       </div>
     </div>
 </div>

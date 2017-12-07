@@ -188,6 +188,7 @@ function checkUserWord(word, scrambleSolutions, guessedWords){
     })
     guessedWords.push(word)
     showGuessedWords(guessedWords)
+    $('#attempts').scrollTop($('#attempts')[0].scrollHeight)
   }
 }
 
