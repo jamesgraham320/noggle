@@ -2,6 +2,7 @@ class GamesController < ApplicationController
 
   def create
     current_game = Game.find_by(running: true) || Game.new
+    byebug
     current_game.users = User.online
     if current_game.save
       ActionCable.server.broadcast 'game_channel', {current_game: {game_data: current_game, scores: current_game.scores, users: current_game.users}}

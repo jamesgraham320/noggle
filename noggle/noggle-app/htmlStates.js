@@ -8,6 +8,7 @@ let usersOnlineHTML = `
 <div>
   <h2>Send Messages!</h2>
   <div id="messages">
+    <ul id="messages-ul"></ul>
   </div>
     <form id="message-form">
       <div class="field has-addons">
