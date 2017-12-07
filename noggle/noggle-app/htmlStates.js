@@ -1,6 +1,13 @@
 
 let usersOnlineHTML = `
-<h1 class="online-title">noggle</h1>
+<h1 class="online-title">
+  <span>n</span>
+  <span>o</span>
+  <span>g</span>
+  <span>g</span>
+  <span>l</span>
+  <span>e</span>
+</h1>
 <div class="dashboard-container">
 
   <div id="users-online">

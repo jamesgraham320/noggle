@@ -118,7 +118,9 @@ function displayGame(gameData) {
   document.body.innerHTML = gameHTML
   //Get and set the div with the scrammbled letters
   let scrambleDiv = document.getElementById('scramble')
-  scrambleDiv.innerText = gameData.game_data.scramble
+  for (let i = 0; i < gameData.game_data.scramble.length; i++) {
+    scrambleDiv.innerHTML += `<span class="shake shake-constant shake-hard">${gameData.game_data.scramble.charAt(i)}</span>`
+  }
   let scrambleSolutions = gameData.game_data.solutions
   //Get the score for this user and set their scoreId in sessionStorage
   let score = gameData.scores.find( score => parseInt(sessionStorage.getItem('userId')) === score.user_id)
