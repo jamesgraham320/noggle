@@ -46,7 +46,8 @@ h2 {
   font-family: "Fredoka One", cursive;
   text-align: center;
   font-size: 1.4444444em;
-  color: #384E77; }
+  color: #384E77;
+  margin-bottom: 1%;}
 
 .online-title {
   margin-top: 5vh;
@@ -69,7 +70,8 @@ input {
   font-weight: inherit; }
 
 .users-online {
-  color: white; }
+  color: white;
+  text-align: center;}
 
 .home-container {
   display: flex;
@@ -93,14 +95,15 @@ input {
   margin-right: -10vw;
   margin-bottom: 20px;
   border-radius: 10px;
-  box-shadow: 5px 5px #384E77; }
+  box-shadow: 5px 5px #384E77;
+  overflow: auto;}
 
 #message-form {
   margin: 0 auto;
   text-align: center;
   width: 100%; }
 
-#start-game {
+#start-game, #start-over {
   border-radius: 10px; }
 
 #message {
@@ -110,9 +113,84 @@ input {
   overflow-y: scroll;
   height: 80%; }
 
+/*.user-message-li b{
+  color: red;*/
+  /*background: rgba(85, 214, 190, 0.1);*/
+  /*border-radius: 2px;
+  /*margin-top: 2px;*/
+/*}*/
+
+/*.user-message-li:nth-child(odd) b{
+  color: blue;*/
+  /*background: rgba(254, 95, 85, 0.1);*/
+  /*border-radius:2px;
+  margin-top: 2px;*/
+/*}*/
+
+.scoreboard-li{
+  background: rgba(85, 214, 190, 0.1);
+  border-radius: 2px;
+  margin-top: 2px;
+}
+
+.scoreboard-li:nth-child(odd) {
+  background: rgba(254, 95, 85, 0.1);
+  border-radius:2px;
+  margin-top: 2px;
+}
+
 .dashboard-container {
   display: flex;
   align-items: center;
   justify-content: space-evenly; }
 
+#scramble {
+  letter-spacing: 20px;
+}
+
+#game-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#game-container > div {
+  font-size: 0.9em;
+  background-color: #F4F4F4;
+  width: 23%;
+  height: 39vh;
+  padding: 15px 50px;
+  margin-left: -10vw;
+  margin-right: -10vw;
+  margin-bottom: 20px;
+  margin-top: -40px;
+  border-radius: 10px;
+  box-shadow: 5px 5px #384E77;
+}
+
+#word-attempts {
+  text-align: center;
+  overflow: auto;
+}
+
+#final-scores {
+  font-size: 0.9em;
+  background-color: #F4F4F4;
+  width: 23%;
+  height: 39vh;
+  padding: 15px 50px;
+  margin: 15px auto;
+  border-radius: 10px;
+  box-shadow: 5px 5px #384E77;
+  overflow: auto;
+}
+
+#winner h1{
+  margin-bottom: 1%;
+}
+
+#leaderboard {
+  background-color: inherit;
+  margin: 0 auto;
+}
 /*# sourceMappingURL=styles.css.map */
