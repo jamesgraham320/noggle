@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         alert(json.errors.username)
       } else {
         //if a user comes back, now connect to the websocket and show online users
-        sessionStorage.setItem( 'userId', json.user.id)
+        sessionStorage.setItem('userId', json.user.id)
         establishConnection()
         setTimeout(fetchUsers, 400)
       }
@@ -153,7 +153,7 @@ function displayMessage(gameData){
   let newMessage = document.getElementById('messages-ul')
   let newLi = document.createElement('Li')
   newLi.className = 'user-message-li'
-  newLi.innerHTML = `<b>${gameData.user_name}</b>: ${gameData.content}`
+  newLi.innerHTML = `<b style="color:rgba(${gameData.user_color}, 1)">${gameData.user_name}</b>: ${gameData.content}`
   newMessage.append(newLi)
   //always scroll to the bottom if there's too many messages
   $('#messages').scrollTop($('#messages')[0].scrollHeight);
