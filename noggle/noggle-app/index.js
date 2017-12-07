@@ -224,9 +224,9 @@ function displayEndGame(finalScores) {
   //display final scores
   finalScores.users.forEach(user => {
     let userScore = finalScores.scores.find( score => user.id === score.user_id)
-    let newLi = document.createElement('li')
-    newLi.innerText = `${user.username}  -  ${userScore.points} points`
-    scoreboard.append(newLi)
+    let newTr = document.createElement('tr')
+    newTr.innerHTML = `<td>${user.username}</td><td>${userScore.points}</td>`
+    scoreboard.append(newTr)
   })
   //add event listener to start over button
   let startOver = document.getElementById("start-over")
