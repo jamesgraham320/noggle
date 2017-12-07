@@ -17,8 +17,10 @@ class UsersController < ApplicationController
     users = User.all
     users_online = users.select {|user| user.online == true}
     object = {users: users_online, high_scores: Score.high_scores}
-    if Game.last.running
-      object['game'] = Game.last.id
+    if Game.last
+      if Game.last.running
+        object['game'] = Game.last.id
+      end
     end
     ActionCable.server.broadcast "game_channel", object
   end
