@@ -140,10 +140,11 @@ function displayGame(gameData) {
   })
 }
 function displayMessage(gameData){
-  let newMessage = document.getElementById('messages')
-  let newP = document.createElement('p')
-  newP.innerText = gameData.user_name + ":  " + gameData.content
-  newMessage.append(newP)
+  let newMessage = document.getElementById('messages-ul')
+  let newLi = document.createElement('Li')
+  newLi.className = 'user-message-li'
+  newLi.innerText = gameData.user_name + ":  " + gameData.content
+  newMessage.append(newLi)
   $('#messages').scrollTop($('#messages')[0].scrollHeight);
 
 }
@@ -156,6 +157,7 @@ function displayScores(gameData) {
   gameData.users.forEach(user => {
     let userScore = gameData.scores.find( score => user.id === score.user_id)
     let newLi = document.createElement('li')
+    newLi.className = 'scoreboard-li'
     newLi.innerHTML = `${user.username}  -  ${userScore.points} points`
     scoreboard.append(newLi)
   })

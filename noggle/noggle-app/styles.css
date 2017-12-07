@@ -78,6 +78,30 @@ input {
   overflow-y: scroll;
   height: 80%; }
 
+.user-message-li{
+  background: rgba(85, 214, 190, 0.1);
+  border-radius: 2px;
+  margin-top: 2px;
+}
+
+.user-message-li:nth-child(odd) {
+  background: rgba(254, 95, 85, 0.1);
+  border-radius:2px;
+  margin-top: 2px;
+}
+
+.scoreboard-li{
+  background: rgba(85, 214, 190, 0.1);
+  border-radius: 2px;
+  margin-top: 2px;
+}
+
+.scoreboard-li:nth-child(odd) {
+  background: rgba(254, 95, 85, 0.1);
+  border-radius:2px;
+  margin-top: 2px;
+}
+
 .dashboard-container {
   display: flex;
   align-items: center;
