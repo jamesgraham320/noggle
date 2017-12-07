@@ -67,18 +67,24 @@ function displayOnlineUsers(data){
   let onlineDiv = document.getElementById('users-online')
   let startButton = document.getElementById('start-game')
   let messageForm = document.getElementById('message-form')
-  let leaderBoard = document.getElementById('leaderboard')
+  let leaderBoardTable = document.getElementById('leaderboard')
   onlineDiv.innerHTML = "<h2>Currently Online: </h2>"
+
+  //display top scores
+  let place = 1;
   data.high_scores.forEach(score => {
-    let newLi = document.createElement('li')
-    newLi.innerHTML = `${score.user} -- ${score.points}`
-    leaderBoard.append(newLi)
+    let tr = document.createElement('tr')
+    tr.innerHTML = `<td>${place}</td><td>${score.user}</td><td>${score.points}</td>`
+    leaderBoardTable.append(tr)
+    place++;
   })
+  //disable button if a game is currently being played
   if (data.game) {
     sessionStorage.setItem('gameId', data.game)
     startButton.innerText = "Game In Progress"
     startButton.disabled = true
   }
+  //add event listener to start button to make a game
   startButton.addEventListener('click', (event) => {
     fetch("http://localhost:3000/games", {
       method: 'post',
@@ -86,12 +92,14 @@ function displayOnlineUsers(data){
     })
   })
 
+  //display online users
   data.users.forEach(user => {
     let newP = document.createElement('p')
     newP.innerText = user.username
     onlineDiv.append(newP)
   })
 
+  //add event listener to post a message
   messageForm.addEventListener('submit', (event) => {
     event.preventDefault()
     let message = document.getElementById('message').value
@@ -139,12 +147,15 @@ function displayGame(gameData) {
     checkUserWord(userWord, scrambleSolutions, guessedWords)
   })
 }
+
+//called when a new message is received
 function displayMessage(gameData){
   let newMessage = document.getElementById('messages-ul')
   let newLi = document.createElement('Li')
   newLi.className = 'user-message-li'
-  newLi.innerText = gameData.user_name + ":  " + gameData.content
+  newLi.innerHTML = `<b>${gameData.user_name}</b>: ${gameData.content}`
   newMessage.append(newLi)
+  //always scroll to the bottom if there's too many messages
   $('#messages').scrollTop($('#messages')[0].scrollHeight);
 
 }
@@ -179,6 +190,7 @@ function checkUserWord(word, scrambleSolutions, guessedWords){
   }
 }
 
+//show all the words that were guessed
 function showGuessedWords(guessedWords){
   let attempts = document.getElementById('attempts')
   attempts.innerText = ''
@@ -187,6 +199,7 @@ function showGuessedWords(guessedWords){
     attemptLi.innerText = word
     attempts.append(attemptLi)
   })
+  $('#attempts').scrollTop($('#attempts')[0].scrollHeight)
 }
 
 function fetchUsers() {

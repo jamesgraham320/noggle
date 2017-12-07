@@ -38,7 +38,8 @@ input {
   font-weight: inherit; }
 
 .users-online {
-  color: white; }
+  color: white;
+  text-align: center;}
 
 .home-container {
   display: flex;
@@ -62,7 +63,8 @@ input {
   margin-right: -10vw;
   margin-bottom: 20px;
   border-radius: 10px;
-  box-shadow: 5px 5px #384E77; }
+  box-shadow: 5px 5px #384E77;
+  overflow: auto;}
 
 #message-form {
   margin: 0 auto;
@@ -79,16 +81,18 @@ input {
   overflow-y: scroll;
   height: 80%; }
 
-.user-message-li{
-  background: rgba(85, 214, 190, 0.1);
-  border-radius: 2px;
-  margin-top: 2px;
+.user-message-li b{
+  color: red;
+  /*background: rgba(85, 214, 190, 0.1);*/
+  /*border-radius: 2px;
+  /*margin-top: 2px;*/
 }
 
-.user-message-li:nth-child(odd) {
-  background: rgba(254, 95, 85, 0.1);
-  border-radius:2px;
-  margin-top: 2px;
+.user-message-li:nth-child(odd) b{
+  color: blue;
+  /*background: rgba(254, 95, 85, 0.1);*/
+  /*border-radius:2px;
+  margin-top: 2px;*/
 }
 
 .scoreboard-li{
@@ -151,5 +155,10 @@ input {
 
 #winner h1{
   margin-bottom: 1%;
+}
+
+#leaderboard {
+  background-color: inherit;
+  margin: 0 auto;
 }
 /*# sourceMappingURL=styles.css.map */
