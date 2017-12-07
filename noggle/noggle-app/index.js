@@ -96,6 +96,7 @@ function displayOnlineUsers(data){
   data.users.forEach(user => {
     let newP = document.createElement('p')
     newP.innerText = user.username
+    newP.style.color = `rgba(${user.color}, 1)`
     onlineDiv.append(newP)
   })
 
@@ -194,14 +195,22 @@ function checkUserWord(word, scrambleSolutions, guessedWords){
 
 //show all the words that were guessed
 function showGuessedWords(guessedWords){
-  let attempts = document.getElementById('attempts')
-  attempts.innerText = ''
-  guessedWords.forEach( word => {
+  let attemptsOne = document.getElementById('attempts-1')
+  let attemptsTwo = document.getElementById('attempts-2')
+
+  attemptsOne.innerText = ''
+  attemptsTwo.innerText = ''
+
+  for (let i = 0; i < guessedWords.length; i++) {
     let attemptLi = document.createElement('li')
-    attemptLi.innerText = word
-    attempts.append(attemptLi)
-  })
-  $('#attempts').scrollTop($('#attempts')[0].scrollHeight)
+    attemptLi.innerText = guessedWords[i]
+    if (i % 2 === 0) {
+      attemptsOne.append(attemptLi);
+    }
+    else {
+      attemptsTwo.append(attemptLi);
+    }
+  }
 }
 
 function fetchUsers() {

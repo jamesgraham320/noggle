@@ -8,7 +8,7 @@ h1 {
   letter-spacing: 5px;
   font-size: 5em;
   text-shadow: 3px 3px #384E77;
-  text-align: center; 
+  text-align: center;
 }
 
 h1 span {
@@ -84,8 +84,7 @@ input {
   font-family: inherit;
   font-weight: inherit; }
 
-.users-online {
-  color: white;
+#users-online {
   text-align: center;}
 
 .home-container {
@@ -209,5 +208,11 @@ input {
 #leaderboard {
   background-color: inherit;
   margin: 0 auto;
+}
+
+#word-attempts {
+  float: left;
+  width: 50%;
+  text-align: center;
 }
 /*# sourceMappingURL=styles.css.map */

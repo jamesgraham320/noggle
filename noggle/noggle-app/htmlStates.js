@@ -78,7 +78,11 @@ let gameHTML = `
     <div id="attempts-container">
       <h2>Guessed Words</h2>
       <div id="word-attempts">
-        <ul id="attempts">
+        <ul id="attempts-1">
+        </ul>
+      </div>
+      <div id="word-attempts">
+        <ul id="attempts-2">
         </ul>
       </div>
     </div>
