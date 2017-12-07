@@ -35,6 +35,18 @@ let usersOnlineHTML = `
         </tbody>
       </table>
   </div>
+  <div id="users-scoreboard">
+    <h2>Your Best Scores!</h2>
+      <table class="table is-hoverable is-narrow" id="users-highscores">
+        <thead>
+          <tr>
+            <td>Points</td>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+  </div>
 </div>
 <div class="center-this-bitch">
   <button id="start-game" class="button is-primary is-large is-rounded">Start Game</button>

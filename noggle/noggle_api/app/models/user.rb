@@ -8,8 +8,11 @@ class User < ApplicationRecord
     self.all.where('online = ?', true)
   end
 
-  def high_scores 
+  def high_scores
     self.scores.order("points DESC").limit(10)
   end
 
+  def user_best_scores
+    high_scores.map {|score| {score: score.points, word: score.game.scramble, date: score.updated_at.strftime('%m/%d/%y')}}
+  end
 end
