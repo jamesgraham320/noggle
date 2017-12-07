@@ -47,7 +47,16 @@ let gameHTML = `
   <div id="game-container">
     <div id="game-scores">
       <h2>Scores</h2>
-      <ul id="scoreboard"></ul>
+      <table class="table is-hoverable is-narrow is-fullwidth" style="background-color:inherit">
+        <thead>
+          <tr>
+            <td>Username</td>
+            <td>Points</td>
+          </tr>
+        </thead>
+        <tbody id="scoreboard">
+        </tbody>
+      </table>
     </div>
       <form id="submission-form">
         <div class="field has-addons">
